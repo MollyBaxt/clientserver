@@ -3,7 +3,7 @@ import sys
 import json
 from data import a_dict
 
-jsonResult = json.dumps(a_dict)
+json_result = json.dumps(a_dict)
 try:
     sock = socket.socket()
 except socket.error as err:
@@ -14,12 +14,12 @@ host = "localhost"
 
 try:
     sock.connect((host, port))
-    sock.send(bytes(jsonResult, 'utf-8'))
+    sock.send(bytes(json_result, 'utf-8'))
 except socket.gaierror:
 
     print('There an error resolving the host')
 
     sys.exit()
 
-print(jsonResult, 'was sent!')
+print(json_result, 'was sent!')
 sock.close()
