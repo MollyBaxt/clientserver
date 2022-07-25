@@ -1,6 +1,6 @@
 from random import randint
 from time import time
-from crypto import encrypt_data
+from utils.crypto import encrypt_data
 import lorem
 
 

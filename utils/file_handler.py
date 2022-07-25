@@ -1,5 +1,5 @@
-from generators import generate_dict, generate_plaintext, generate_crytpo_text
-from n_client import client_textfile, client_connection
+from utils.generators import generate_dict, generate_plaintext, generate_crytpo_text
+from src.client import client_textfile, client_connection
 import json
 
 
