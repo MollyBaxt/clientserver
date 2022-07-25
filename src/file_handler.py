@@ -13,7 +13,7 @@ def generate_data(sel):
         client_textfile(file_name)
     else:
         data = json.dumps(generate_dict())
-        client_connection(data)
+        client_connection("json_data", data)
 
 
 
