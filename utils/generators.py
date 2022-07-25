@@ -18,11 +18,11 @@ def generate_plaintext():
     print(f"Text Generated:\n"
           f"{t}")
 
-    with open('lorem_plaintext.txt', 'w') as f:
+    with open('data/lorem_plaintext.txt', 'w') as f:
         f.write(t)
         f.close()
 
-    return 'lorem_plaintext'
+    return 'lorem_plaintext.txt'
 
 
 def generate_crytpo_text():
@@ -32,8 +32,8 @@ def generate_crytpo_text():
     print(f"Text Generated:\n"
           f"{t}")
 
-    with open('lorem_encrypted.txt', 'w') as f:
+    with open('data/lorem_encrypted.txt', 'w') as f:
         f.write(str(t))
         f.close()
 
-    return 'lorem_encrypted'
+    return 'lorem_encrypted.txt'
