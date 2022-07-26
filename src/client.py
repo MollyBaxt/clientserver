@@ -1,33 +1,43 @@
 import socket
+from Cryptodome.Cipher import AES
 
-IP = "127.0.0.1"
-PORT = 1234
-ADDR = (IP, PORT)
-FORMAT = "utf-8"
-SIZE = 1024
-
-
-def client_textfile(file_name):
-    file = open(f"{file_name}", "r")
-    data = file.read()
-    file.close()
-    client_connection(file_name, data)
+SERVER_IP = "127.0.0.1"  # server IP of 127.0.0.1 LOOPBACK used for testing
+SERVER_PORT = 9000  # server Port
+CIPHER_KEY = b'bQeThWmZq4t7w!z%C*F-JaNdRfUjXn2r'  # Shared Encryption/decryption Key
+NONCE = b'dRgUkXp2s5v8y/B?E(G+KbPeShVmYq3t'  # shared NONCE key for validity
 
 
-def client_connection(file_name, data):
-    print(file_name, type(data))
-    """ Staring a TCP socket. """
-    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    """ Connecting to the server. """
-    client.connect(ADDR)
-    """ Sending the filename to the server. """
-    client.send(file_name.encode(FORMAT))
-    msg = client.recv(SIZE).decode(FORMAT)
-    print(f"[SERVER]: {msg}")
-    """ Sending the file data to the server. """
-    client.send(data.encode(FORMAT))
-    msg = client.recv(SIZE).decode(FORMAT)
-    print(f"[SERVER]: {msg}")
-    """ Closing the connection from the server. """
+def encrypt(msg):
+    raw_message = msg.encode("utf-8")  # Encode message to bytes
+    CIPHER = AES.new(CIPHER_KEY, AES.MODE_EAX,
+                     NONCE)  # AES encryption using EAX  with predefined cipher key and nonce key for validation
+    ciphertext, tag = CIPHER.encrypt_and_digest(raw_message)
+    return ciphertext
+
+
+def run_client(filename, msg, do_encrypt):
+    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # TCP socket creation
+    client.connect((SERVER_IP, SERVER_PORT))  # TCP connection
+
+    while True:
+        raw_filename = filename.encode("utf-8")
+        client.send(raw_filename)
+        print()
+        raw_message = msg.encode("utf-8")  # Encode message to bytes
+        print(raw_message)
+        if do_encrypt:
+            msg_packet = encrypt(msg)
+            print(msg_packet)
+        else:
+            msg_packet = raw_message
+            print(f"Not encrypted: {msg_packet}")
+        print("Sending Message:", msg_packet)
+        client.send(msg_packet)  # send ciphertext of raw message
+        print()
+        break
+
     client.close()
+    print('Message Sent..Goodbye')
+    print()
+
 

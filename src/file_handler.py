@@ -1,19 +1,19 @@
-from utils.generators import generate_dict, generate_plaintext, generate_crytpo_text
-from src.client import client_textfile, client_connection
+from generators import generate_dict, generate_text
+from client import run_client
 import json
 
 
 def generate_data(sel):
 
     if sel == 1:
-        file_name = generate_plaintext()
-        client_textfile(file_name)
+        msg = generate_text()
+        run_client("plaintext", msg, False)
     elif sel == 2:
-        file_name = generate_crytpo_text()
-        client_textfile(file_name)
+        msg = generate_text()
+        run_client("encrypted", msg, True)
     else:
         data = json.dumps(generate_dict())
-        client_connection("json_data", data)
+        run_client("json_data", data, False)
 
 
 

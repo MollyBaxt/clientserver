@@ -1,52 +1,45 @@
 import socket
-from base64 import b64decode
+from Cryptodome.Cipher import AES
 
-from utils.cryp import decrypt_data
-import json
-from time import sleep
+SERVER_IP = "127.0.0.1"  # Server IP using Loopback for testing
+SERVER_PORT = 9000  # Server Port
+CIPHER_KEY = b'bQeThWmZq4t7w!z%C*F-JaNdRfUjXn2r'  # Shared Key 32 bytes for 256-bit encryption
+TCP_BUFFER = 1024  # Buffer for receiving data
+NONCE = b'dRgUkXp2s5v8y/B?E(G+KbPeShVmYq3t'  # shared nonce key for validation.
 
-IP = "127.0.0.1"
-PORT = 1234
-ADDR = (IP, PORT)
-SIZE = 1024
-FORMAT = "utf-8"
+tcp_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # initialize TCP stream
+tcp_server.bind((SERVER_IP, SERVER_PORT))  # Bind TCP Stream connection
+tcp_server.listen(1)  # Listen for TCP connection
 
-print("[STARTING] Server is starting.")
-""" Staring a TCP socket. """
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-""" Bind the IP and PORT to the server. """
-server.bind(ADDR)
-""" Server is listening, i.e., server is now waiting for the client to connected. """
-server.listen()
-print("[LISTENING] Server is listening.")
+conn, addr = tcp_server.accept()  # connection
+print('Client Connected From:', addr)
+print()
+
 while True:
-    """ Server has accepted the connection from the client. """
-    conn, addr = server.accept()
-    print(f"[NEW CONNECTION] {addr} connected.")
-    """ Receiving the filename from the client. """
-    filename = conn.recv(SIZE).decode(FORMAT)
-    print(f"[RECV] Receiving the filename: {filename}.")
-    conn.send("Filename received.".encode(FORMAT))
-    """ Receiving the file data from the client. """
+    print("[SERVER] Receiving Message...")
+    print()
+    filename = conn.recv(TCP_BUFFER).decode("utf-8")
+    print(filename)
+    print("[SERVER] Received Filename :", filename)
+    data = conn.recv(TCP_BUFFER)  # Client sending cipher message
+
     if "encrypted" in filename:
-        data = conn.recv(SIZE).decode(FORMAT)
-        print(data, type(data))
-        encrypted = b64decode(data)
-        print(type(encrypted))
-        decrypted = decrypt_data(encrypted)
-        print(type(decrypted), decrypted)
-        msg = decrypted.decode()
-        with open('received_data.txt', 'w') as file:
-            file.write(msg)
-        print(msg)
-    print(f"[RECV] Receiving the file data.")
-    conn.send("File data received".encode(FORMAT))
-    """ Closing the file. """
-    file.close()
-    """ Closing the connection from the client. """
-    conn.close()
-    print(f"[DISCONNECTED] {addr} disconnected.")
+        ciphertext = data
+        print("Received Encrypted Message:", ciphertext)
+        print()
+        cipher = AES.new(CIPHER_KEY, AES.MODE_EAX, NONCE)  # AES encryption using EAX -Encrypt/authenticate/translate
+        plaintext = cipher.decrypt(ciphertext)  # decryption of cipher message passed from client
+        print("Decrypting using Shared Key...")
+        print(plaintext)
+        print("data:", data)
+    if "plaintext" in filename:
+        plaintext = data
+        print("Received Message:", plaintext)
+        print("data:", data)
+    if "json" in filename:
+        print(data)
 
+    break
 
-def output(data):
-    print("placeholder")
+print("Goodbye!")
+tcp_server.close()
