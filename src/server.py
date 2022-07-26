@@ -1,4 +1,9 @@
 import socket
+from base64 import b64decode
+
+from utils.cryp import decrypt_data
+import json
+from time import sleep
 
 IP = "127.0.0.1"
 PORT = 1234
@@ -20,23 +25,27 @@ while True:
     print(f"[NEW CONNECTION] {addr} connected.")
     """ Receiving the filename from the client. """
     filename = conn.recv(SIZE).decode(FORMAT)
-    print(f"[RECV] Receiving the filename.")
-    file = open(f"data/server_received/{filename}", "w")
+    print(f"[RECV] Receiving the filename: {filename}.")
     conn.send("Filename received.".encode(FORMAT))
     """ Receiving the file data from the client. """
-    data = conn.recv(SIZE).decode(FORMAT)
+    if "encrypted" in filename:
+        data = conn.recv(SIZE).decode(FORMAT)
+        print(data, type(data))
+        encrypted = b64decode(data)
+        print(type(encrypted))
+        decrypted = decrypt_data(encrypted)
+        print(type(decrypted), decrypted)
+        msg = decrypted.decode()
+        with open('received_data.txt', 'w') as file:
+            file.write(msg)
+        print(msg)
     print(f"[RECV] Receiving the file data.")
-    file.write(data)
     conn.send("File data received".encode(FORMAT))
     """ Closing the file. """
     file.close()
     """ Closing the connection from the client. """
     conn.close()
     print(f"[DISCONNECTED] {addr} disconnected.")
-
-
-def decrypt(file):
-    print("placeholder")
 
 
 def output(data):

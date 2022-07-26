@@ -1,6 +1,7 @@
 from random import randint
 from time import time
-from utils.crypto import encrypt_data
+from utils.cryp import generate_secret_key, encrypt_data
+from base64 import b64encode
 import lorem
 
 
@@ -18,7 +19,7 @@ def generate_plaintext():
     print(f"Text Generated:\n"
           f"{t}")
 
-    with open('data/lorem_plaintext.txt', 'w') as f:
+    with open('lorem_plaintext.txt', 'w') as f:
         f.write(t)
         f.close()
 
@@ -26,14 +27,16 @@ def generate_plaintext():
 
 
 def generate_crytpo_text():
-    t = encrypt_data(lorem.sentence())
-    print(t)
-
+    key = generate_secret_key()
+    msg = lorem.sentence()
+    enc_msg = encrypt_data(msg, key, "{")
+    print(f"Type is {type(enc_msg)}")
     print(f"Text Generated:\n"
-          f"{t}")
+          f"{enc_msg}")
 
-    with open('data/lorem_encrypted.txt', 'w') as f:
-        f.write(str(t))
+    with open('lorem_encrypted.txt', 'w') as f:
+        f.write(enc_msg)
         f.close()
 
     return 'lorem_encrypted.txt'
+
