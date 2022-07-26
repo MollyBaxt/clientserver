@@ -8,14 +8,14 @@ SIZE = 1024
 
 
 def client_textfile(file_name):
-    file = open(f"data/client_data/{file_name}", "r")
+    file = open(f"{file_name}", "r")
     data = file.read()
-    client_connection(data)
     file.close()
+    client_connection(file_name, data)
 
 
 def client_connection(file_name, data):
-    print(file_name, data)
+    print(file_name, type(data))
     """ Staring a TCP socket. """
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     """ Connecting to the server. """
@@ -28,7 +28,6 @@ def client_connection(file_name, data):
     client.send(data.encode(FORMAT))
     msg = client.recv(SIZE).decode(FORMAT)
     print(f"[SERVER]: {msg}")
-    """ Closing the file. """
     """ Closing the connection from the server. """
     client.close()
 
