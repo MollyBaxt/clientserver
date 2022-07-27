@@ -10,8 +10,9 @@ print("3: Generate random JSON data and send to server")
 print("4: Exit")
 print("------------------------------------")
 
-
-while True:
+not_valid = True
+while not_valid:
+    not_valid = False
     try:
         user_sel = int(input("Please make a selection: "))
     except ValueError:
@@ -24,6 +25,7 @@ while True:
             sys.exit()
         else:
             print("Please enter within the range provided")
+            not_valid = True
 
 
 
