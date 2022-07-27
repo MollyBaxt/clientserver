@@ -12,31 +12,31 @@ NONCE = b'dRgUkXp2s5v8y/B?E(G+KbPeShVmYq3t'  # shared nonce key for validation.
 tcp_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # initialize TCP stream
 tcp_server.bind((SERVER_IP, SERVER_PORT))  # Bind TCP Stream connection
 tcp_server.listen(1)  # Listen for TCP connection
-
+print("[SERVER] Listening...")
 conn, addr = tcp_server.accept()  # connection
-print('Client Connected From:', addr)
-print()
+print(f"Client Connected From: {addr}\n")
+
 
 while True:
     print("[SERVER] Receiving Message...")
     print()
     filename = conn.recv(TCP_BUFFER).decode()
     print(filename)
-    print("[SERVER] Received Filename :", filename)
+    print(f"[SERVER] Received Filename: {filename}")
     sleep(0.1)
     data = conn.recv(TCP_BUFFER) # Client sending message
 
     if "json" in filename:
-        print(f"[SERVER] {json.loads(data)}")
+        print(f"[SERVER] JSON data is: {json.loads(data)}")
     if "encrypted" in filename:
         ciphertext = data
         print("[SERVER] Received Encrypted Message:", ciphertext)
         cipher = AES.new(CIPHER_KEY, AES.MODE_EAX, NONCE)  # AES encryption using EAX -Encrypt/authenticate/translate
         plaintext = cipher.decrypt(ciphertext)  # decryption of cipher message passed from client
         print("[SERVER] Decrypting using Shared Key...")
-        print(plaintext.decode())
+        print(f" Decrypted Message is: {plaintext.decode()}")
     if "plaintext" in filename:
-        print(data.decode())
+        print(f"Message is: {data.decode()}")
 
     break
 
