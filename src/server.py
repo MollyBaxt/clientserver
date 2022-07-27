@@ -1,5 +1,7 @@
 import socket
 from Cryptodome.Cipher import AES
+import json
+from time import sleep
 
 SERVER_IP = "127.0.0.1"  # Server IP using Loopback for testing
 SERVER_PORT = 9000  # Server Port
@@ -18,26 +20,23 @@ print()
 while True:
     print("[SERVER] Receiving Message...")
     print()
-    filename = conn.recv(TCP_BUFFER).decode("utf-8")
+    filename = conn.recv(TCP_BUFFER).decode()
     print(filename)
     print("[SERVER] Received Filename :", filename)
-    data = conn.recv(TCP_BUFFER)  # Client sending cipher message
+    sleep(0.1)
+    data = conn.recv(TCP_BUFFER) # Client sending message
 
+    if "json" in filename:
+        print(f"[SERVER] {json.loads(data)}")
     if "encrypted" in filename:
         ciphertext = data
-        print("Received Encrypted Message:", ciphertext)
-        print()
+        print("[SERVER] Received Encrypted Message:", ciphertext)
         cipher = AES.new(CIPHER_KEY, AES.MODE_EAX, NONCE)  # AES encryption using EAX -Encrypt/authenticate/translate
         plaintext = cipher.decrypt(ciphertext)  # decryption of cipher message passed from client
-        print("Decrypting using Shared Key...")
-        print(plaintext)
-        print("data:", data)
+        print("[SERVER] Decrypting using Shared Key...")
+        print(plaintext.decode())
     if "plaintext" in filename:
-        plaintext = data
-        print("Received Message:", plaintext)
-        print("data:", data)
-    if "json" in filename:
-        print(data)
+        print(data.decode())
 
     break
 
