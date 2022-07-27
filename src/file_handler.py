@@ -1,5 +1,5 @@
-from generators import generate_dict, generate_text
-from client import run_client
+from src.generators import generate_dict, generate_text
+from src.client import run_client
 import json
 
 
