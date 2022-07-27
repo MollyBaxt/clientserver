@@ -13,13 +13,5 @@ def generate_dict():
 
 
 def generate_text():
-    t = lorem.sentence()
-    print(f"Text Generated:\n"
-          f"{t}")
-
-    with open('lorem_text.txt', 'w') as f:
-        f.write(t)
-        f.close()
-
-    return t
+    return lorem.sentence().strip(".")
 
