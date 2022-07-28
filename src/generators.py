@@ -13,5 +13,12 @@ def generate_dict():
 
 
 def generate_text():
-    return lorem.sentence().strip(".")
+    text = lorem.sentence().strip(".")
+
+    with open("some_text.txt", "w") as file:
+        file.write(text)
+        file.close()
+
+    return text
+
 

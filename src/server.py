@@ -17,6 +17,20 @@ conn, addr = tcp_server.accept()  # connection
 print(f"Client Connected From: {addr}\n")
 
 
+def output_result(data):
+    to_output = input("Decrypted. Output? [Y/n]: ")
+    if to_output == "y" or "Y":
+        print(f" Decrypted Message is: {data}")
+
+
+def export_to_file(filename, data):
+    to_export = input("Export to file? [Y/n]: ")
+    if to_export == "y" or "Y":
+        with open(f"{filename}.txt", "w") as file:
+            file.write(data)
+            file.close()
+
+
 while True:
     print("[SERVER] Receiving Message...")
     print()
@@ -27,16 +41,20 @@ while True:
     data = conn.recv(TCP_BUFFER) # Client sending message
 
     if "json" in filename:
-        print(f"[SERVER] JSON data is: {json.loads(data)}")
+        output_result(json.loads(data))
+
     if "encrypted" in filename:
         ciphertext = data
         print("[SERVER] Received Encrypted Message:", ciphertext)
         cipher = AES.new(CIPHER_KEY, AES.MODE_EAX, NONCE)  # AES encryption using EAX -Encrypt/authenticate/translate
         plaintext = cipher.decrypt(ciphertext)  # decryption of cipher message passed from client
         print("[SERVER] Decrypting using Shared Key...")
-        print(f" Decrypted Message is: {plaintext.decode()}")
+        output_result(plaintext.decode())
+        export_to_file(filename, plaintext.decode())
+
     if "plaintext" in filename:
-        print(f"Message is: {data.decode()}")
+        output_result(data.decode())
+        export_to_file(filename, data.decode())
 
     break
 
