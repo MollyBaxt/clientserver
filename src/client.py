@@ -25,18 +25,15 @@ def run_client(filename, msg, do_encrypt):
         print(f"[CLIENT] Sending filename: {filename}")
         client.send(raw_filename)
         sleep(0.01)  # Allows filename packet to be sent before sending data packet
-        if do_encrypt: # If do_encrypt is True, then pass data to be encrypted
+        if do_encrypt:  # If do_encrypt is True, then pass data to be encrypted
             msg_packet = encrypt(msg)
         else:
             msg_packet = msg.encode()
 
-        print("Sending Message:", msg_packet)
+        print(f"Sending Message: {msg_packet}")
         client.send(msg_packet)  # send ciphertext of raw message
-        print()
         break
 
     client.close()
-    print('Message Sent..Goodbye')
+    print('Message Sent..Closing')
     print()
-
-

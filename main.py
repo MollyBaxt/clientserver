@@ -1,5 +1,5 @@
 import sys
-from file_handler import generate_data
+from src.file_handler import generate_data
 
 print("Client/Server and Encryption Program")
 print("------------------------------------")
