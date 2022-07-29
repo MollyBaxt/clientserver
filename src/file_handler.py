@@ -4,7 +4,7 @@ import json
 
 
 def generate_data(sel):
-
+    """Handle control flow of program based on user selection"""
     if sel == 1:
         msg = generate_text()
         run_client("plaintext", msg, False)
