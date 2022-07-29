@@ -4,7 +4,7 @@ import lorem
 
 
 def generate_dict():
-    # """Generate random json packet with hashed data bits"""
+    """Generate random json packet with hashed data bits"""
     return {
         "id": randint(1, 100),
         "timestamp": time(),
@@ -13,6 +13,7 @@ def generate_dict():
 
 
 def generate_text():
+    """Generate random text, write to file and return value"""
     text = lorem.sentence().strip(".")
 
     with open("some_text.txt", "w") as file:

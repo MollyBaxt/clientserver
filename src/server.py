@@ -18,12 +18,14 @@ print(f"Client Connected From: {addr}\n")
 
 
 def output_result(data):
+    """Ask if user wanted to output data to console."""
     to_output = input("Decrypted. Output? [Y/n]: ")
     if to_output == "y" or "Y":
         print(f" Decrypted Message is: {data}")
 
 
 def export_to_file(filename, data):
+    """Ask if user wanted to output data to file."""
     to_export = input("Export to file? [Y/n]: ")
     if to_export == "y" or "Y":
         with open(f"{filename}.txt", "w") as file:
@@ -32,16 +34,16 @@ def export_to_file(filename, data):
 
 
 while True:
-    print("[SERVER] Receiving Message...")
+    print("[SERVER] Receiving Message...")  # Prompt that message being received from client
     print()
-    filename = conn.recv(TCP_BUFFER).decode()
+    filename = conn.recv(TCP_BUFFER).decode()  # Decode filename from bytes to str
     print(filename)
     print(f"[SERVER] Received Filename: {filename}")
     sleep(0.1)
-    data = conn.recv(TCP_BUFFER) # Client sending message
+    data = conn.recv(TCP_BUFFER)  # Client sending message
 
     if "json" in filename:
-        output_result(json.loads(data))
+        output_result(json.loads(data))  # Convert back to dict
 
     if "encrypted" in filename:
         ciphertext = data
@@ -49,8 +51,8 @@ while True:
         cipher = AES.new(CIPHER_KEY, AES.MODE_EAX, NONCE)  # AES encryption using EAX -Encrypt/authenticate/translate
         plaintext = cipher.decrypt(ciphertext)  # decryption of cipher message passed from client
         print("[SERVER] Decrypting using Shared Key...")
-        output_result(plaintext.decode())
-        export_to_file(filename, plaintext.decode())
+        output_result(plaintext.decode())  # Send to out func
+        export_to_file(filename, plaintext.decode())  # Send to export func
 
     if "plaintext" in filename:
         output_result(data.decode())
@@ -59,4 +61,4 @@ while True:
     break
 
 print("Goodbye!")
-tcp_server.close()
+tcp_server.close()  # Close server connection

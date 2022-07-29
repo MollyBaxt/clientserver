@@ -9,6 +9,7 @@ NONCE = b'dRgUkXp2s5v8y/B?E(G+KbPeShVmYq3t'  # shared NONCE key for validity
 
 
 def encrypt(msg):
+    """Func to encrypted text and return"""
     raw_message = msg.encode()  # Encode message to bytes
     CIPHER = AES.new(CIPHER_KEY, AES.MODE_EAX,
                      NONCE)  # AES encryption using EAX with predefined cipher key and nonce key for validation
@@ -17,6 +18,7 @@ def encrypt(msg):
 
 
 def run_client(filename, msg, do_encrypt):
+    """Main client that checks for encryption, encodes to bytes and sends to server"""
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # TCP socket creation
     client.connect((SERVER_IP, SERVER_PORT))  # TCP connection
 
