@@ -20,7 +20,7 @@ def main():
         except ValueError:  # Catch value errors if Int is not entered
             print("Please ensure you have entered a valid number")
         else:
-            if user_sel == 1 or 2 or 3:
+            if user_sel == 1 or user_sel == 2 or user_sel == 3:
                 generate_data(user_sel)
             elif user_sel == 4:
                 print("Exiting...")
