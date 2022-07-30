@@ -14,10 +14,3 @@ def generate_data(sel):
     else:
         data = json.dumps(generate_dict())
         run_client("json_data", data, False)
-
-
-
-
-
-
-
