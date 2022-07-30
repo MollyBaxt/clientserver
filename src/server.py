@@ -5,15 +5,15 @@ from time import sleep
 
 SERVER_IP = "127.0.0.1"  # Server IP using Loopback for testing
 SERVER_PORT = 9000  # Server Port
-CIPHER_KEY = b'bQeThWmZq4t7w!z%C*F-JaNdRfUjXn2r'  # Shared Key 32 bytes for 256-bit encryption
+CIPHER_KEY = b'bQeThWmZq4t7w!z%C*F-JaNdRfUjXn2r'  # Shared CIPHER Key
 TCP_BUFFER = 1024  # Buffer for receiving data
-NONCE = b'dRgUkXp2s5v8y/B?E(G+KbPeShVmYq3t'  # shared nonce key for validation.
+NONCE = b'dRgUkXp2s5v8y/B?E(G+KbPeShVmYq3t'  # Shared NONCE Key
 
-tcp_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # initialize TCP stream
+tcp_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 tcp_server.bind((SERVER_IP, SERVER_PORT))  # Bind TCP Stream connection
 tcp_server.listen(1)  # Listen for TCP connection
 print("[SERVER] Listening...")
-conn, addr = tcp_server.accept()  # connection
+conn, addr = tcp_server.accept()  # Connection
 print(f"Client Connected From: {addr}\n")
 
 
@@ -34,9 +34,9 @@ def export_to_file(filename, data):
 
 
 while True:
-    print("[SERVER] Receiving Message...")  # Prompt that message being received from client
+    print("[SERVER] Receiving Message...")  # Prompt message being received
     print()
-    filename = conn.recv(TCP_BUFFER).decode()  # Decode filename from bytes to str
+    filename = conn.recv(TCP_BUFFER).decode()  # Decode from bytes to str
     print(filename)
     print(f"[SERVER] Received Filename: {filename}")
     sleep(0.1)
@@ -48,8 +48,8 @@ while True:
     if "encrypted" in filename:
         ciphertext = data
         print("[SERVER] Received Encrypted Message:", ciphertext)
-        cipher = AES.new(CIPHER_KEY, AES.MODE_EAX, NONCE)  # AES encryption using EAX -Encrypt/authenticate/translate
-        plaintext = cipher.decrypt(ciphertext)  # decryption of cipher message passed from client
+        cipher = AES.new(CIPHER_KEY, AES.MODE_EAX, NONCE)  # AES encryption
+        plaintext = cipher.decrypt(ciphertext)  # Decryption of cipher message
         print("[SERVER] Decrypting using Shared Key...")
         output_result(plaintext.decode())  # Send to out func
         export_to_file(filename, plaintext.decode())  # Send to export func
