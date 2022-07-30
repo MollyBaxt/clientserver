@@ -15,10 +15,10 @@ class MyTestCase(unittest.TestCase):
 
     def test_json(self):
         sent_dict = {
-        "id": randint(1, 100),
-        "timestamp": time(),
-        "data": hash(str(randint(1, 100)))
-        }
+             "id": randint(1, 100),
+             "timestamp": time(),
+             "data": hash(str(randint(1, 100)))
+             }
         expected_received_dict = {json.dumps(sent_dict)}
         self.assertNotEqual(sent_dict, expected_received_dict)
 
