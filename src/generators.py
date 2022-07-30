@@ -21,5 +21,3 @@ def generate_text():
         file.close()
 
     return text
-
-
