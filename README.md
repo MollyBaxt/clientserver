@@ -3,11 +3,17 @@
 This project builds a client server network allowing different capabilities. Features include a selection menu for a user, sending a dictionary formatted in JSON and the ability to send an encrypted text file. This is written in PEP standards and includes exception handling. 
 ## What is included
 This repository contains the following files.
-server.py - The server file for the client server network
-client.py - The client file for the client server network
+
+server.py - The server file for the client server network.
+
+client.py - The client file for the client server network.
+
 main.py - To be ran  with the server file. Contains a user selection menu.
+
 generators.py - This file creates random pieces of data that can be used for the client server network.
-file_handler.py - This code handles the files based on the user selection and uses the randomly generated data from generators.py
+
+file_handler.py - This code handles the files based on the user selection and uses the randomly generated data from generators.py.
+
 unittest.py - Code showing two tests. Test one to show the expected data is being generated. Test two is testing the use of json.dumps. 
 
 ## Language
