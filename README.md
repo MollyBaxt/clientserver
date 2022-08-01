@@ -16,6 +16,8 @@ file_handler.py - This code handles the files based on the user selection and us
 
 unittest.py - Code showing two tests. Test one to show the expected data is being generated. Test two is testing the use of json.dumps. 
 
+directorytree.py - organises files into directories.
+
 ## Language
 The language used was Python3
 ## Run and installation
