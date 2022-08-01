@@ -18,6 +18,8 @@ unittest.py - Code showing two tests. Test one to show the expected data is bein
 
 directorytree.py - organises files into directories.
 
+requirements.txt - shows all the packages needed to install for the running of the client server network. 
+
 ## Language
 The language used was Python3
 ## Run and installation
